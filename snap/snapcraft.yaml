@@ -1,0 +1,71 @@
+name: kairo
+base: core24
+version: "0.1.3"
+summary: A calm focus timer and study tracker
+description: |
+  Kairo is a private, local-first focus companion for open-ended sessions,
+  custom timers, and configurable Pomodoro cycles. Review study history and
+  insights, set daily goals, and keep distraction-free YouTube playlists close
+  while you work.
+
+  Sessions, playlists, timer state, wallpapers, and preferences stay on your
+  device. No account or Kairo cloud service is required.
+grade: stable
+confinement: strict
+license: MIT
+website: https://github.com/Rudra78996/kairo
+source-code: https://github.com/Rudra78996/kairo
+issues: https://github.com/Rudra78996/kairo/issues
+icon: snap/gui/kairo.svg
+
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+
+layout:
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/webkit2gtk-4.1:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/webkit2gtk-4.1
+
+apps:
+  kairo:
+    command: usr/bin/kairo
+    extensions: [gnome]
+    plugs:
+      - audio-playback
+      - home
+      - network
+      - network-bind
+
+parts:
+  kairo:
+    plugin: dump
+    source: .
+    build-snaps:
+      - node/20/stable
+      - rustup/latest/stable
+    build-packages:
+      - build-essential
+      - curl
+      - dpkg
+      - file
+      - libayatana-appindicator3-dev
+      - librsvg2-dev
+      - libssl-dev
+      - libwebkit2gtk-4.1-dev
+      - libxdo-dev
+      - wget
+    stage-packages:
+      - gstreamer1.0-libav
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-pulseaudio
+      - libayatana-appindicator3-1
+      - libwebkit2gtk-4.1-0
+    override-build: |
+      set -eu
+      npm ci
+      npm run tauri build -- --bundles deb
+      dpkg -x src-tauri/target/release/bundle/deb/Kairo_*_amd64.deb "$CRAFT_PART_INSTALL"
+      rm -f "$CRAFT_PART_INSTALL/usr/share/applications/Kairo.desktop"

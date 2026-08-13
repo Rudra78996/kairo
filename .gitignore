@@ -5,6 +5,8 @@ node_modules
 !.env.example
 npm-debug.log*
 *.tsbuildinfo
+*.snap
+.snapcraft/
 
 # Local design references and generated screenshots
 wallhaven-*.png

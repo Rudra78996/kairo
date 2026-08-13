@@ -62,6 +62,23 @@ npm run desktop:build
 
 Desktop bundles are written under `src-tauri/target/release/bundle`. Pushing a version tag such as `v0.1.0` runs the GitHub Actions release workflow and creates a draft release with both Linux packages.
 
+### Snap Store
+
+The Store-ready recipe lives in `snap/snapcraft.yaml`. Build and test it with:
+
+```bash
+snapcraft pack
+sudo snap install --dangerous ./kairo_*.snap
+snap run kairo
+```
+
+Store releases should be tested on `edge` before promotion to `stable`:
+
+```bash
+snapcraft upload ./kairo_*.snap --release=edge
+snapcraft promote kairo --from-channel=latest/edge --to-channel=latest/stable
+```
+
 ## Commands
 
 ```bash
