@@ -1,14 +1,13 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name={{name}}
-NoDisplay=true
+Name=Kairo
 GenericName=Focus timer and study tracker
-Comment={{comment}}
-Exec={{exec}}
+Comment=A calm, local-first focus timer and study tracker.
+Exec=kairo
 Icon=io.github.rudra78996.kairo
 Terminal=false
-Categories={{categories}}
+Categories=Office;Utility;
 StartupNotify=true
 StartupWMClass=kairo
 Keywords=focus;timer;pomodoro;study;productivity;

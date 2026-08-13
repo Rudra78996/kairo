@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Kairo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "identifier": "io.github.rudra78996.kairo",
   "build": {
     "frontendDist": "../out",
@@ -10,8 +10,10 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
+    "enableGTKAppId": true,
     "windows": [
       {
+        "label": "main",
         "title": "Kairo",
         "width": 1280,
         "height": 800,
@@ -20,6 +22,9 @@
         "center": true,
         "resizable": true,
         "decorations": false,
+        "transparent": true,
+        "backgroundColor": "#00000000",
+        "create": false,
         "fullscreen": false
       }
     ],
@@ -47,8 +52,16 @@
           "gstreamer1.0-pulseaudio"
         ],
         "desktopTemplate": "desktop/kairo.desktop.hbs",
+        "postInstallScript": "desktop/postinstall.sh",
+        "postRemoveScript": "desktop/postremove.sh",
         "files": {
-          "/usr/share/metainfo/io.github.rudra78996.kairo.metainfo.xml": "desktop/io.github.rudra78996.kairo.metainfo.xml"
+          "/usr/share/metainfo/io.github.rudra78996.kairo.metainfo.xml": "desktop/io.github.rudra78996.kairo.metainfo.xml",
+          "/usr/share/applications/io.github.rudra78996.kairo.desktop": "desktop/io.github.rudra78996.kairo.desktop",
+          "/usr/share/icons/hicolor/32x32/apps/io.github.rudra78996.kairo.png": "icons/32x32.png",
+          "/usr/share/icons/hicolor/64x64/apps/io.github.rudra78996.kairo.png": "icons/64x64.png",
+          "/usr/share/icons/hicolor/128x128/apps/io.github.rudra78996.kairo.png": "icons/128x128.png",
+          "/usr/share/icons/hicolor/256x256/apps/io.github.rudra78996.kairo.png": "icons/128x128@2x.png",
+          "/usr/share/icons/hicolor/512x512/apps/io.github.rudra78996.kairo.png": "icons/icon.png"
         }
       }
     },

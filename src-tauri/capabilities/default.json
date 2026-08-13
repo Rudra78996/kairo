@@ -5,6 +5,12 @@
   "windows": [
     "main"
   ],
+  "remote": {
+    "urls": [
+      "http://localhost:9527/*",
+      "http://localhost:3000/*"
+    ]
+  },
   "permissions": [
     "core:default",
     "core:window:allow-close",

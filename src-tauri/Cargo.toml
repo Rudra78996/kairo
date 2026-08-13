@@ -1,6 +1,6 @@
 [package]
 name = "kairo"
-version = "0.1.1"
+version = "0.1.2"
 description = "A calm, local-first focus timer, Pomodoro companion, and study tracker."
 authors = ["Rudra Pratap Singh"]
 license = "MIT"
@@ -19,3 +19,4 @@ tauri-build = { version = "2.6.3", features = [] }
 
 [dependencies]
 tauri = { version = "2.11.3", features = [] }
+tauri-plugin-localhost = "2.3.2"

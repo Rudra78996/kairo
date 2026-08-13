@@ -8,8 +8,8 @@
   <description>
     <p>Kairo combines focus sessions, configurable Pomodoro cycles, study history, insights, and distraction-free music playback in a private local-first desktop app.</p>
   </description>
-  <launchable type="desktop-id">Kairo.desktop</launchable>
-  <icon type="stock">kairo</icon>
+  <launchable type="desktop-id">io.github.rudra78996.kairo.desktop</launchable>
+  <icon type="stock">io.github.rudra78996.kairo</icon>
   <url type="homepage">https://github.com/Rudra78996/kairo</url>
   <url type="bugtracker">https://github.com/Rudra78996/kairo/issues</url>
   <provides>
@@ -20,6 +20,6 @@
     <category>Utility</category>
   </categories>
   <releases>
-    <release version="0.1.1" date="2026-08-13" />
+    <release version="0.1.2" date="2026-08-13" />
   </releases>
 </component>

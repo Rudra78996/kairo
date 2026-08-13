@@ -1,6 +1,6 @@
 {
   "name": "kairo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "A calm, local-first focus timer, Pomodoro companion, and study tracker.",
   "license": "MIT",
