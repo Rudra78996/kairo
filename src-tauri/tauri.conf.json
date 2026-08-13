@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Kairo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "io.github.rudra78996.kairo",
   "build": {
     "frontendDist": "../out",
@@ -19,6 +19,7 @@
         "minHeight": 640,
         "center": true,
         "resizable": true,
+        "decorations": false,
         "fullscreen": false
       }
     ],
@@ -33,10 +34,29 @@
     "shortDescription": "A calm, local-first focus timer and study tracker.",
     "longDescription": "Kairo combines open-ended focus sessions, customizable Pomodoro cycles, study history, insights, and distraction-free YouTube playback in a private local-first desktop app.",
     "licenseFile": "../LICENSE",
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": true
+      },
+      "deb": {
+        "recommends": [
+          "gstreamer1.0-plugins-base",
+          "gstreamer1.0-plugins-good",
+          "gstreamer1.0-plugins-bad",
+          "gstreamer1.0-libav",
+          "gstreamer1.0-pulseaudio"
+        ],
+        "desktopTemplate": "desktop/kairo.desktop.hbs",
+        "files": {
+          "/usr/share/metainfo/io.github.rudra78996.kairo.metainfo.xml": "desktop/io.github.rudra78996.kairo.metainfo.xml"
+        }
+      }
+    },
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
+      "icons/icon.png",
       "icons/icon.icns",
       "icons/icon.ico"
     ],

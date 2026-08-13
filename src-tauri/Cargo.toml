@@ -1,6 +1,6 @@
 [package]
 name = "kairo"
-version = "0.1.0"
+version = "0.1.1"
 description = "A calm, local-first focus timer, Pomodoro companion, and study tracker."
 authors = ["Rudra Pratap Singh"]
 license = "MIT"

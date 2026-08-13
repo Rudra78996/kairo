@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.rudra78996.kairo</id>
+  <name>Kairo</name>
+  <summary>A calm focus timer and study tracker</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>Kairo combines focus sessions, configurable Pomodoro cycles, study history, insights, and distraction-free music playback in a private local-first desktop app.</p>
+  </description>
+  <launchable type="desktop-id">Kairo.desktop</launchable>
+  <icon type="stock">kairo</icon>
+  <url type="homepage">https://github.com/Rudra78996/kairo</url>
+  <url type="bugtracker">https://github.com/Rudra78996/kairo/issues</url>
+  <provides>
+    <binary>kairo</binary>
+  </provides>
+  <categories>
+    <category>Office</category>
+    <category>Utility</category>
+  </categories>
+  <releases>
+    <release version="0.1.1" date="2026-08-13" />
+  </releases>
+</component>

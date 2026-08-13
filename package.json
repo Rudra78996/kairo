@@ -1,6 +1,6 @@
 {
   "name": "kairo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "A calm, local-first focus timer, Pomodoro companion, and study tracker.",
   "license": "MIT",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
+    "@tauri-apps/api": "^2.11.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "geist": "^1.4.2",

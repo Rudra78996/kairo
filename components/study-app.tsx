@@ -20,6 +20,7 @@ import {
   ListMusic,
   Maximize2,
   Minimize2,
+  Minus,
   Music2,
   Pause,
   PencilLine,
@@ -621,7 +622,7 @@ export function StudyApp() {
       <main
         className="main-shell"
       >
-        <header className="topbar">
+        <header className="topbar" data-tauri-drag-region>
           <div className="topbar-start">
             <div className="brand topbar-brand">
               <div className="brand-mark"><TimerReset /></div>
@@ -636,6 +637,7 @@ export function StudyApp() {
                 <Plus data-icon="inline-start" /> Add session
               </Button>
             )}
+            <DesktopWindowControls />
           </div>
         </header>
 
@@ -694,18 +696,20 @@ function NavStats({ lifetimeSeconds, goalHours, todaySeconds, sessions, onGoalCh
 function PersistentPlayer({ tracks, track, playing, muted, onTrackChange, onPlayingChange, onMutedChange, onOpenMusic }: { tracks: Track[]; track: Track; playing: boolean; muted: boolean; onTrackChange: (track: Track) => void; onPlayingChange: (playing: boolean) => void; onMutedChange: (muted: boolean) => void; onOpenMusic: () => void }) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const handledEndRef = useRef<string | null>(null);
-  const playerSrc = `${track.embedUrl}${track.embedUrl.includes("?") ? "&" : "?"}enablejsapi=1&controls=0&playsinline=1&rel=0`;
+  const playerOrigin = typeof window === "undefined" ? "" : `&origin=${encodeURIComponent(window.location.origin)}`;
+  const playerSrc = `${track.embedUrl}${track.embedUrl.includes("?") ? "&" : "?"}enablejsapi=1&controls=0&playsinline=1&rel=0${playerOrigin}`;
   const activeQueue = useMemo(() => tracks.filter((item) => item.playlistId === track.playlistId), [tracks, track.playlistId]);
   const currentIndex = Math.max(0, activeQueue.findIndex((item) => item.id === track.id));
 
-  function command(func: "playVideo" | "pauseVideo" | "mute" | "unMute" | "seekTo", args: (number | boolean)[] = []) {
+  function command(func: "playVideo" | "pauseVideo" | "mute" | "unMute" | "setVolume" | "seekTo", args: (number | boolean)[] = []) {
     frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args }), "*");
   }
 
   function syncPlayer() {
     frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: "listening", id: "kairo-player", channel: "" }), "*");
-    command(playing ? "playVideo" : "pauseVideo");
     command(muted ? "mute" : "unMute");
+    if (!muted) command("setVolume", [100]);
+    command(playing ? "playVideo" : "pauseVideo");
   }
 
   function moveTrack(direction: -1 | 1) {
@@ -713,10 +717,25 @@ function PersistentPlayer({ tracks, track, playing, muted, onTrackChange, onPlay
     if (nextTrack) onTrackChange(nextTrack);
   }
 
+  function togglePlayback() {
+    const nextPlaying = !playing;
+    command(muted ? "mute" : "unMute");
+    if (!muted) command("setVolume", [100]);
+    command(nextPlaying ? "playVideo" : "pauseVideo");
+    onPlayingChange(nextPlaying);
+  }
+
+  function toggleMuted() {
+    const nextMuted = !muted;
+    command(nextMuted ? "mute" : "unMute");
+    if (!nextMuted) command("setVolume", [100]);
+    onMutedChange(nextMuted);
+  }
+
   useEffect(() => {
     handledEndRef.current = null;
-    const timeout = window.setTimeout(syncPlayer, 120);
-    return () => window.clearTimeout(timeout);
+    const timeouts = [120, 500, 1200].map((delay) => window.setTimeout(syncPlayer, delay));
+    return () => timeouts.forEach(window.clearTimeout);
   // The iframe remains mounted between view changes; these are the only playback inputs.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing, muted, track.id]);
@@ -726,6 +745,8 @@ function PersistentPlayer({ tracks, track, playing, muted, onTrackChange, onPlay
       if (event.source !== frameRef.current?.contentWindow) return;
       try {
         const payload = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+        const isReady = payload?.event === "onReady" || (payload?.event === "infoDelivery" && payload?.info?.playerState === 5);
+        if (isReady) syncPlayer();
         const ended = (payload?.event === "infoDelivery" && payload?.info?.playerState === 0) || (payload?.event === "onStateChange" && payload?.info === 0);
         if (!ended || handledEndRef.current === track.id) return;
         handledEndRef.current = track.id;
@@ -738,6 +759,8 @@ function PersistentPlayer({ tracks, track, playing, muted, onTrackChange, onPlay
     }
     window.addEventListener("message", handlePlayerMessage);
     return () => window.removeEventListener("message", handlePlayerMessage);
+  // syncPlayer intentionally reads the current player props; this listener is rebuilt with those inputs below.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeQueue, currentIndex, onPlayingChange, onTrackChange, track.id]);
 
   return (
@@ -745,11 +768,36 @@ function PersistentPlayer({ tracks, track, playing, muted, onTrackChange, onPlay
       <iframe ref={frameRef} className="soundtrack-frame" src={playerSrc} onLoad={syncPlayer} title={`${track.title} audio player`} allow="autoplay; encrypted-media" />
       <Tooltip><TooltipTrigger render={<button className="player-thumbnail" onClick={onOpenMusic} aria-label={`Open queue for ${track.title}`} />}><Image src={getTrackArtwork(track)} alt="" fill sizes="40px" /></TooltipTrigger><TooltipContent>{track.title}</TooltipContent></Tooltip>
       <button className="mini-control" disabled={currentIndex === 0} onClick={() => moveTrack(-1)} aria-label="Previous track"><ChevronLeft /></button>
-      <button className="mini-play" onClick={() => onPlayingChange(!playing)} aria-label={playing ? "Pause music" : "Play music"}>{playing ? <Pause /> : <Play />}</button>
+      <button className="mini-play" onClick={togglePlayback} aria-label={playing ? "Pause music" : "Play music"}>{playing ? <Pause /> : <Play />}</button>
       <button className="mini-control" disabled={currentIndex >= activeQueue.length - 1} onClick={() => moveTrack(1)} aria-label="Next track"><ChevronRight /></button>
-      <button className="mini-control volume-control" onClick={() => onMutedChange(!muted)} aria-label={muted ? "Unmute music" : "Mute music"}>{muted ? <VolumeX /> : <Volume2 />}</button>
+      <button className="mini-control volume-control" onClick={toggleMuted} aria-label={muted ? "Unmute music" : "Mute music"}>{muted ? <VolumeX /> : <Volume2 />}</button>
       <button className="mini-control queue-control" onClick={onOpenMusic} aria-label="Open music queue"><ListMusic /></button>
     </aside>
+  );
+}
+
+function DesktopWindowControls() {
+  const [desktop, setDesktop] = useState(false);
+
+  useEffect(() => {
+    setDesktop("__TAURI_INTERNALS__" in window);
+  }, []);
+
+  async function control(action: "minimize" | "maximize" | "close") {
+    const { getCurrentWindow } = await import("@tauri-apps/api/window");
+    const appWindow = getCurrentWindow();
+    if (action === "minimize") await appWindow.minimize();
+    else if (action === "maximize") await appWindow.toggleMaximize();
+    else await appWindow.close();
+  }
+
+  if (!desktop) return null;
+  return (
+    <div className="desktop-window-controls" aria-label="Window controls">
+      <button onClick={() => void control("minimize")} aria-label="Minimize Kairo"><Minus /></button>
+      <button onClick={() => void control("maximize")} aria-label="Maximize Kairo"><Square /></button>
+      <button className="window-close" onClick={() => void control("close")} aria-label="Close Kairo"><X /></button>
+    </div>
   );
 }
 
