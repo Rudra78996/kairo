@@ -65,6 +65,7 @@ parts:
       - libwebkit2gtk-4.1-0
     override-build: |
       set -eu
+      unset LD_LIBRARY_PATH
       npm ci
       npm run tauri build -- --bundles deb
       dpkg -x src-tauri/target/release/bundle/deb/Kairo_*_amd64.deb "$CRAFT_PART_INSTALL"
