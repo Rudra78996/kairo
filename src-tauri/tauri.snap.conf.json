@@ -1,5 +1,22 @@
 {
   "app": {
-    "enableGTKAppId": false
+    "enableGTKAppId": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Kairo",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 960,
+        "minHeight": 640,
+        "center": true,
+        "resizable": true,
+        "decorations": false,
+        "transparent": false,
+        "backgroundColor": "#07101f",
+        "create": false,
+        "fullscreen": false
+      }
+    ]
   }
 }

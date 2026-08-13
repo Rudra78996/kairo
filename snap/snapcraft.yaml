@@ -1,6 +1,6 @@
 name: kairo
 base: core24
-version: "0.1.3+snap1"
+version: "0.1.3+snap2"
 summary: A calm focus timer and study tracker
 description: |
   Kairo is a private, local-first focus companion for open-ended sessions,
@@ -31,6 +31,8 @@ apps:
   kairo:
     command: usr/bin/kairo
     extensions: [gnome]
+    environment:
+      WEBKIT_DISABLE_DMABUF_RENDERER: "1"
     plugs:
       - audio-playback
       - home
