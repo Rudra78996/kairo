@@ -66,6 +66,7 @@ parts:
     override-build: |
       set -eu
       unset LD_LIBRARY_PATH
+      rustup default stable
       npm ci
       npm run tauri build -- --bundles deb
       dpkg -x src-tauri/target/release/bundle/deb/Kairo_*_amd64.deb "$CRAFT_PART_INSTALL"
