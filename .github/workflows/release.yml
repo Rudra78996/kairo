@@ -29,7 +29,7 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm ci
 
-      - name: Build and publish Linux bundles
+      - name: Build Debian package
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,4 +39,16 @@ jobs:
           releaseBody: "Download the AppImage for a portable build or the .deb package for Debian, Ubuntu, and Linux Mint."
           releaseDraft: true
           prerelease: false
-          args: --bundles appimage,deb
+          args: --bundles deb
+
+      - name: Build portable AppImage
+        continue-on-error: true
+        env:
+          NO_STRIP: "true"
+        run: npm run tauri build -- --bundles appimage
+
+      - name: Upload portable AppImage
+        if: hashFiles('src-tauri/target/release/bundle/appimage/*.AppImage') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${GITHUB_REF_NAME}" src-tauri/target/release/bundle/appimage/*.AppImage --clobber
