@@ -27,18 +27,10 @@ layout:
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/webkit2gtk-4.1:
     bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/webkit2gtk-4.1
 
-slots:
-  kairo-dbus:
-    interface: dbus
-    bus: session
-    name: io.github.rudra78996.kairo
-
 apps:
   kairo:
     command: usr/bin/kairo
     extensions: [gnome]
-    slots:
-      - kairo-dbus
     plugs:
       - audio-playback
       - home
@@ -76,6 +68,6 @@ parts:
       unset LD_LIBRARY_PATH
       rustup default stable
       npm ci
-      npm run tauri build -- --bundles deb
+      npm run tauri build -- --bundles deb --config src-tauri/tauri.snap.conf.json
       dpkg -x src-tauri/target/release/bundle/deb/Kairo_*_amd64.deb "$CRAFT_PART_INSTALL"
       rm -f "$CRAFT_PART_INSTALL/usr/share/applications/Kairo.desktop"
