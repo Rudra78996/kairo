@@ -31,8 +31,8 @@ Requirements:
 - npm 10 or newer
 
 ```bash
-git clone https://github.com/Rudra78996/kario.git
-cd kario
+git clone https://github.com/Rudra78996/kairo.git
+cd kairo
 npm install
 npm run dev
 ```

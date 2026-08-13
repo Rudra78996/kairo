@@ -1,17 +1,17 @@
 {
-  "name": "kario",
+  "name": "kairo",
   "version": "0.1.0",
   "private": true,
   "description": "A calm, local-first focus timer, Pomodoro companion, and study tracker.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rudra78996/kario.git"
+    "url": "git+https://github.com/Rudra78996/kairo.git"
   },
   "bugs": {
-    "url": "https://github.com/Rudra78996/kario/issues"
+    "url": "https://github.com/Rudra78996/kairo/issues"
   },
-  "homepage": "https://github.com/Rudra78996/kario#readme",
+  "homepage": "https://github.com/Rudra78996/kairo#readme",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
