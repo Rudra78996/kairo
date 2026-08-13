@@ -26,6 +26,7 @@ jobs:
           path: ${{ steps.snapcraft.outputs.snap }}
 
       - name: Publish to edge
+        if: github.event_name == 'push'
         uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
