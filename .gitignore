@@ -1,0 +1,10 @@
+.next
+node_modules
+.env*
+!.env.example
+npm-debug.log*
+*.tsbuildinfo
+
+# Local design references and generated screenshots
+wallhaven-*.png
+public/assets/wallpapers/default-clouds.png
