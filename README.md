@@ -41,13 +41,35 @@ Open [http://localhost:3000](http://localhost:3000).
 
 No environment variables are required.
 
+## Linux desktop app
+
+Kairo includes a Tauri 2 desktop shell. Linux releases target AppImage and `.deb` packages.
+
+On Ubuntu or Debian, install the native build prerequisites first:
+
+```bash
+sudo apt update
+sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
+  libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+```
+
+Install Rust with [rustup](https://rustup.rs/), then run:
+
+```bash
+npm run desktop:dev
+npm run desktop:build
+```
+
+Desktop bundles are written under `src-tauri/target/release/bundle`. Pushing a version tag such as `v0.1.0` runs the GitHub Actions release workflow and creates a draft release with both Linux packages.
+
 ## Commands
 
 ```bash
 npm run dev      # Start the development server
 npm run lint     # Run ESLint
-npm run build    # Create a production build
-npm run start    # Run the production server
+npm run build    # Create the static production export
+npm run desktop:dev    # Open Kairo in the Tauri development shell
+npm run desktop:build  # Build AppImage and .deb packages
 ```
 
 ## Tech stack
@@ -59,6 +81,7 @@ npm run start    # Run the production server
 - Recharts
 - Lucide icons
 - Browser `localStorage` and IndexedDB
+- Tauri 2 for the Linux desktop shell
 
 ## YouTube playback
 

@@ -190,6 +190,17 @@ function getTrackArtwork(track: Track) {
   return DEFAULT_WALLPAPER;
 }
 
+async function getYouTubeTitle(value: string, kind: Track["kind"]) {
+  const endpoint = new URL("https://www.youtube.com/oembed");
+  endpoint.searchParams.set("url", value);
+  endpoint.searchParams.set("format", "json");
+  const response = await fetch(endpoint, { signal: AbortSignal.timeout(7000) });
+  if (!response.ok) throw new Error("YouTube metadata is unavailable.");
+  const metadata = await response.json() as { title?: unknown };
+  if (typeof metadata.title !== "string" || !metadata.title.trim()) throw new Error("YouTube did not return a title.");
+  return metadata.title.trim().slice(0, 160) || (kind === "playlist" ? "YouTube playlist" : "YouTube video");
+}
+
 function formatClock(totalSeconds: number) {
   const safe = Math.max(0, totalSeconds);
   const hours = Math.floor(safe / 3600);
@@ -1561,10 +1572,13 @@ function MusicView({ tracks, playlists, selected, musicPlaying, onToggleMusic, o
     if (!embed) { setError("Paste a valid YouTube video or playlist link."); return; }
     setAddingTrack(true);
     try {
-      const response = await fetch(`/api/youtube/title?url=${encodeURIComponent(url)}`);
-      const payload = await response.json();
-      if (!response.ok || typeof payload.title !== "string") throw new Error(payload.message || "Could not read the YouTube title.");
-      const track: Track = { id: crypto.randomUUID(), title: payload.title, url, playlistId: activePlaylistId, ...embed };
+      let title: string;
+      try {
+        title = await getYouTubeTitle(url, embed.kind);
+      } catch {
+        title = embed.kind === "playlist" ? "YouTube playlist" : "YouTube video";
+      }
+      const track: Track = { id: crypto.randomUUID(), title, url, playlistId: activePlaylistId, ...embed };
       onAdd(track);
       setUrl(""); setError(""); setAddOpen(false);
     } catch (reason) {

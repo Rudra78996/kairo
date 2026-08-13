@@ -15,8 +15,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build --bundles appimage,deb"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tauri-apps/cli": "^2.11.4",
     "@types/node": "^22.17.1",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
