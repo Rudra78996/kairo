@@ -16,6 +16,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint .",
+    "tauri": "tauri",
     "desktop:dev": "tauri dev",
     "desktop:build": "tauri build --bundles appimage,deb"
   },
